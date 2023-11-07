@@ -10,6 +10,7 @@ import {
   IonTitle,
   IonButtons,
   IonMenuButton,
+  IonLabel,
 } from "@ionic/react";
 import { createPessoa } from "../../services/apiService";
 
@@ -19,6 +20,39 @@ const CreatePage: React.FC = () => {
   const [idade, setIdade] = useState<number | null>(null);
   const [email, setEmail] = useState<string>("");
   const [telefone, setTelefone] = useState<string>("");
+
+  const [message, setMessage] = useState<string>("");
+
+  const generateRandomData = () => {
+    const name = `Nome${Math.floor(Math.random() * 1000)}`;
+    const surname = `Sobrenome${Math.floor(Math.random() * 1000)}`;
+    const age = Math.floor(Math.random() * 80);
+    const email = `${name}@example.com`;
+    const phone = `${Math.floor(Math.random() * 1000)}-${Math.floor(Math.random() * 1000)}-${Math.floor(Math.random() * 1000)}`;
+    return {
+      Nome: name,
+      Sobrenome: surname,
+      Idade: age,
+      Email: email,
+      Telefone: phone,
+    };
+  }
+
+  const handleMassInsertion = async (count: number) => {
+    setMessage("Iniciando inserção...");
+    const startTime = new Date().getTime();
+
+    for(let i=0; i < count; i++) {
+      const randomData = generateRandomData();
+      console.log(randomData);      
+      await createPessoa(randomData);
+    }
+
+    const endTime = new Date().getTime();
+    const timeTaken = endTime - startTime;
+    setMessage(`Inserção concluída em ${timeTaken} milissegundos.`);
+  }
+
 
   const handleCreate = async () => {
     if (nome && sobrenome && idade !== null) {
@@ -95,6 +129,10 @@ const CreatePage: React.FC = () => {
         <IonButton expand="block" onClick={handleCreate}>
           Criar Pessoa
         </IonButton>
+        <IonButton onClick={() => handleMassInsertion(50)}>Inserir 50 registros</IonButton>
+        <p>
+        <IonLabel>{message}</IonLabel>
+        </p>
       </IonContent>
     </IonPage>
   );

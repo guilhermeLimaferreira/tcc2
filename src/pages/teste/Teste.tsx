@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { IonContent, IonPage, IonInput, IonItem, IonButton } from "@ionic/react";
 
 const Teste: React.FC = () => {
+const [teste, setTeste] = useState<string>();
+
+
+
   return (
     <IonPage>
       <IonContent>
         <IonItem>
           <IonInput
             aria-label="Teste"
-            onIonChange={(e) => console.log(e.detail.value!)}
+            onIonChange={(e) => setTeste(e.detail.value!)}
           ></IonInput>
         </IonItem>
         <IonItem>

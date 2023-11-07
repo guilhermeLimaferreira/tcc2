@@ -11,6 +11,9 @@ import {
   IonTitle,
   IonMenuButton,
   IonButtons,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from "@ionic/react";
 import { getPessoas, deletePessoa } from "../../services/apiServices";
 
@@ -66,22 +69,34 @@ const ListPage: React.FC = () => {
           <IonTitle>Lista de Pessoas</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <IonList>
-          {pessoas.map((pessoa) => (
-            <IonItem key={pessoa.ID}>
-              <IonLabel>
-                {pessoa.Nome} {pessoa.Sobrenome}
-              </IonLabel>
-              <IonButton onClick={() => handleDelete(pessoa.ID)} color="danger">
-                Delete
-              </IonButton>
-              <IonButton routerLink={`/edit/${pessoa.ID}`} color="primary">
-                Edit
-              </IonButton>
-            </IonItem>
-          ))}
-        </IonList>
+      <IonContent className="ion-padding">
+        <IonGrid class="ion-align-items-center">
+          <IonRow class="ion-justify-content-center">
+            <IonCol size="12">
+              <IonList>
+                {pessoas.map((pessoa) => (
+                  <IonItem key={pessoa.ID}>
+                    <IonLabel>
+                      {pessoa.Nome} {pessoa.Sobrenome}
+                    </IonLabel>
+                    <IonButton
+                      onClick={() => handleDelete(pessoa.ID)}
+                      color="danger"
+                    >
+                      Delete
+                    </IonButton>
+                    <IonButton
+                      routerLink={`/edit/${pessoa.ID}`}
+                      color="primary"
+                    >
+                      Edit
+                    </IonButton>
+                  </IonItem>
+                ))}
+              </IonList>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );

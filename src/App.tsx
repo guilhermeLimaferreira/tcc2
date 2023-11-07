@@ -17,7 +17,7 @@ import {
   IonSplitPane
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { addCircle, triangle } from "ionicons/icons";
+import { addCircle, list, triangle } from "ionicons/icons";
 
 import "./theme/variables.css";
 import ListPage from "./pages/listpage/ListPage";
@@ -59,7 +59,7 @@ const App: React.FC = () => {
               <IonList>
                 <IonMenuToggle autoHide={false}>
                   <IonItem button href="/list">
-                    <IonIcon slot="start" icon={triangle} />
+                    <IonIcon slot="start" icon={list} />
                     <IonLabel>Lista de Pessoas</IonLabel>
                   </IonItem>
                   <IonItem button href="/create">
