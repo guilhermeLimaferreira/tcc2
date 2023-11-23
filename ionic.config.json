@@ -1,5 +1,7 @@
 {
   "name": "tcc2",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "react"
 }

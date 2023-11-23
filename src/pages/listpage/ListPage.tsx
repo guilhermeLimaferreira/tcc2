@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import './ListPage.css';
 import {
   IonContent,
   IonPage,
@@ -27,26 +28,50 @@ type Pessoa = {
 
 const ListPage: React.FC = () => {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
+  const [offset, setOffset] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [noMoreData, setNoMoreData] = useState(false);
+  const anchor = useRef(null);
 
   useEffect(() => {
-    const fetchPessoas = async () => {
-      try {
-        const response = await getPessoas();
-        if (response.data.success) {
-          setPessoas(response.data.data);
-        }
-      } catch (error) {
-        console.log("Erro ao buscar pessoas:", error);
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !isLoading && !noMoreData) {
+        loadMorePessoas();
       }
-    };
-    fetchPessoas();
-  }, []);
+    }, { threshold: 0.1 });
 
-  useEffect(() => {
-    pessoas.map((pessoa) => {
-      console.log(pessoa);
-    });
-  }, [pessoas]);
+    if (anchor.current) {
+      observer.observe(anchor.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isLoading, noMoreData]);
+
+  const loadMorePessoas = async () => {
+    if (isLoading || noMoreData) return;
+
+    setIsLoading(true);
+    try {
+      const response = await getPessoas(offset);
+      if (response && response.data.success) {
+        const newPessoas: Pessoa[] = response.data.data;
+
+        const uniqueNewPessoas = newPessoas.filter(newPessoa => 
+          !pessoas.some(existingPessoa => existingPessoa.ID === newPessoa.ID)
+        );
+
+        if (uniqueNewPessoas.length === 0) {
+          setNoMoreData(true);
+        } else {
+          setPessoas(prev => [...prev, ...uniqueNewPessoas]);
+          setOffset(prevOffset => prevOffset + uniqueNewPessoas.length); // Atualiza o offset
+        }
+      }
+    } catch (error) {
+      console.log("Erro ao carregar mais pessoas:", error);
+    }
+    setIsLoading(false);
+  };
 
   const handleDelete = async (id: number) => {
     try {
@@ -70,6 +95,9 @@ const ListPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
+        <div className="contador-flutuante">
+          Registros Carregados: {pessoas.length}
+        </div>
         <IonGrid class="ion-align-items-center">
           <IonRow class="ion-justify-content-center">
             <IonCol size="12">
@@ -97,6 +125,7 @@ const ListPage: React.FC = () => {
             </IonCol>
           </IonRow>
         </IonGrid>
+        <div ref={anchor}></div> {/* Elemento de âncora para IntersectionObserver */}
       </IonContent>
     </IonPage>
   );

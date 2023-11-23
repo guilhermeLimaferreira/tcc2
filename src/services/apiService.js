@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://devionic.com.br/', // Endereço atualizado do seu backend
+  baseURL: 'https://devionic.com.br/', // Endereço atualizado do seu backend
 });
 
 export const getPessoas = () => api.get('read.php');

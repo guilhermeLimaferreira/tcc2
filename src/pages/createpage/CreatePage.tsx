@@ -26,9 +26,11 @@ const CreatePage: React.FC = () => {
   const generateRandomData = () => {
     const name = `Nome${Math.floor(Math.random() * 1000)}`;
     const surname = `Sobrenome${Math.floor(Math.random() * 1000)}`;
-    const age = Math.floor(Math.random() * 80);
+    const age = Math.floor(Math.random() * 80) + 1; // Garantir que a idade seja pelo menos 1
     const email = `${name}@example.com`;
-    const phone = `${Math.floor(Math.random() * 1000)}-${Math.floor(Math.random() * 1000)}-${Math.floor(Math.random() * 1000)}`;
+    const phone = `${Math.floor(100 + Math.random() * 900)}-${Math.floor(100 + Math.random() * 900)}-${Math.floor(1000 + Math.random() * 9000)}`;
+    // Garantir que o telefone não seja "000-000-0000"
+  
     return {
       Nome: name,
       Sobrenome: surname,
@@ -37,22 +39,38 @@ const CreatePage: React.FC = () => {
       Telefone: phone,
     };
   }
+  
 
-  const handleMassInsertion = async (count: number) => {
+  const handleMassInsertion = async () => {
+    const inputCount = prompt("Digite a quantidade de registros para inserção massiva:", "10");
+  
+    // Verificar se o inputCount não é null
+    if (inputCount === null) {
+      alert("Inserção cancelada pelo usuário.");
+      return;
+    }
+  
+    const count = parseInt(inputCount, 10);
+  
+    // Verificar se a contagem é um número válido
+    if (isNaN(count) || count <= 0) {
+      alert("Por favor, insira um número válido.");
+      return;
+    }
+  
     setMessage("Iniciando inserção...");
     const startTime = new Date().getTime();
-
-    for(let i=0; i < count; i++) {
+  
+    for(let i = 0; i < count; i++) {
       const randomData = generateRandomData();
       console.log(randomData);      
       await createPessoa(randomData);
     }
-
+  
     const endTime = new Date().getTime();
     const timeTaken = endTime - startTime;
     setMessage(`Inserção concluída em ${timeTaken} milissegundos.`);
   }
-
 
   const handleCreate = async () => {
     if (nome && sobrenome && idade !== null) {
@@ -94,14 +112,14 @@ const CreatePage: React.FC = () => {
           <IonInput
             label="Nome"
             value={nome}
-            onIonChange={(e) => setNome(e.detail.value!)}
+            onIonInput={(e: any) => setNome(e.detail.value!)}
           />
         </IonItem>
         <IonItem>
           <IonInput
             label="Sobrenome"
             value={sobrenome}
-            onIonChange={(e) => setSobrenome(e.detail.value!)}
+            onIonInput={(e: any) => setSobrenome(e.detail.value!)}
           />
         </IonItem>
         <IonItem>
@@ -109,27 +127,27 @@ const CreatePage: React.FC = () => {
             label="Idade"
             type="number"
             value={idade}
-            onIonChange={(e) => setIdade(Number(e.detail.value))}
+            onIonInput={(e: any) => setIdade(Number(e.detail.value))}
           />
         </IonItem>
         <IonItem>
           <IonInput
             label="Email"
             value={email}
-            onIonChange={(e) => setEmail(e.detail.value!)}
+            onIonInput={(e: any) => setEmail(e.detail.value!)}
           />
         </IonItem>
         <IonItem>
           <IonInput
             label="Telefone"
             value={telefone}
-            onIonChange={(e) => setTelefone(e.detail.value!)}
+            onIonInput={(e: any) => setTelefone(e.detail.value!)}
           />
         </IonItem>
         <IonButton expand="block" onClick={handleCreate}>
           Criar Pessoa
         </IonButton>
-        <IonButton onClick={() => handleMassInsertion(50)}>Inserir 50 registros</IonButton>
+        <IonButton onClick={() => handleMassInsertion()}>Inserir registros em massa</IonButton>
         <p>
         <IonLabel>{message}</IonLabel>
         </p>

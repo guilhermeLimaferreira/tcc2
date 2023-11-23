@@ -57,7 +57,9 @@ const EditPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
   };
 
   const handleOkClick = () => {
+     setShowAlert(false); // fechar o alerta
     history.push("/list"); // redirecionar para a tela ListPage
+    window.location.reload(); // forçar recarregamento da página
   };
 
   return (
@@ -75,14 +77,14 @@ const EditPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
           <IonInput
             label="Nome"
             value={nome}
-            onIonChange={(e) => setNome(e.detail.value!)}
+            onIonInput={(e) => setNome(e.detail.value!)}
           />
         </IonItem>
         <IonItem>
           <IonInput
             label="Sobrenome"
             value={sobrenome}
-            onIonChange={(e) => setSobrenome(e.detail.value!)}
+            onIonInput={(e) => setSobrenome(e.detail.value!)}
           />
         </IonItem>
         <IonItem>
@@ -90,7 +92,7 @@ const EditPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
             label="Idade"
             type="number"
             value={idade}
-            onIonChange={(e) => setIdade(Number(e.detail.value!))}
+            onIonInput={(e) => setIdade(Number(e.detail.value!))}
           />
         </IonItem>
         <IonItem>
@@ -98,14 +100,14 @@ const EditPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
             label="Email"
             type="email"
             value={email}
-            onIonChange={(e) => setEmail(e.detail.value!)}
+            onIonInput={(e) => setEmail(e.detail.value!)}
           />
         </IonItem>
         <IonItem>
           <IonInput
             label="Telefone"
             value={telefone}
-            onIonChange={e => {
+            onIonInput={e => {
               const value = e.detail.value!;
               console.log("Valor em tempo real:", value);
               if (value !== null) {
